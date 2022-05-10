@@ -566,7 +566,7 @@ export default {
         this.currentPlayer = this.game.players[this.profile.username] || {};
         this.controllingPlayerName = this.game.currentPlayerName;
         this.updateFavicon();
-        this.audioNotification();
+        this.audioNotification("genericSound");
       }
       if (
         oldPlayerName !== this.game.currentPlayerName &&
@@ -659,6 +659,11 @@ export default {
       }
     },
     tickWithAction: function(action) {
+
+		if (action.type == "maneuver") {
+			this.audioNotification("marchingArmy");
+		}
+
       this.controllingPlayerName = this.game.currentPlayerName;
       if (!this.paused) {
         apiClient.tick(this.$route.params.id, action);
@@ -732,11 +737,16 @@ export default {
         link.href = "/packs/favicon.ico";
       }
     },
-    audioNotification() {
-      if (this.currentPlayer.name === this.game.currentPlayerName && !this.silenceAudio) {
+    audioNotification(soundName) {
+
+		// add if statement to decide which sound to play
+		new Howl({ src: [notification], volume: 0.1 }).play();
+
+
+      //if (this.currentPlayer.name === this.game.currentPlayerName && !this.silenceAudio) {
         // Disabled because this is annoying. Figure out a better way to implement.
         // new Howl({ src: [notification], volume: 0.1 }).play();
-      }
+      //}
     },
     mapWidth() {
       if (this.game.baseGame === "imperial") {
